@@ -70,11 +70,17 @@ public class FoodSpawner : MonoBehaviour {
         timeToSpawnSpecialFood = Random.Range(min, max);
     }
     
-    /// <summary> Generates random position inside play area. And check if that position is free </summary>
+    /// <summary> Generates random position inside play area. </summary>
     void RanPos()
     {
         x = ((int)Random.Range(left.position.x+1, right.position.x) - 0.5f);
         y = (int)Random.Range(bottom.position.y+1, top.position.y) - 0.5f;
+        CheckPos();
+    }
+
+    /// <summary> Checks if generated in RanPos() method position is free. </summary>
+    void CheckPos()
+    {
         Vector2 pos = new Vector2(x, y);
         if (food || specialFood)
         {
@@ -86,7 +92,8 @@ public class FoodSpawner : MonoBehaviour {
         else if (pos == snakeBehaviour.HPos)
         {
             RanPos();
-        }else if(snakeBehaviour.GetSizeOfTail() > 0)
+        }
+        else if (snakeBehaviour.GetSizeOfTail() > 0)
         {
             for (int i = 0; i < snakeBehaviour.GetSizeOfTail(); i++)
             {
@@ -96,7 +103,6 @@ public class FoodSpawner : MonoBehaviour {
                 }
             }
         }
-
     }
 
 
