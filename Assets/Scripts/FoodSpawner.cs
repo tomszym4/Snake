@@ -11,6 +11,9 @@ public class FoodSpawner : MonoBehaviour {
     public bool FoodSpawned { get; set; }
     public bool SpecialFoodSpawned { get; set; }
     public GameObject foodPrefab, specialFoodPrefab;
+    private Food food;
+    private SpecialFood specialFood;
+    private SnakeBehaviour snakeBehaviour;
 
     private float x, y;     //keeps position of food
     private float timeToSpawnSpecialFood;
@@ -18,6 +21,9 @@ public class FoodSpawner : MonoBehaviour {
 
     private void Start()
     {
+        food = FindObjectOfType<Food>();
+        specialFood = FindObjectOfType<SpecialFood>();
+        snakeBehaviour = FindObjectOfType<SnakeBehaviour>();
         FoodSpawned = false;
         SpecialFoodSpawned = false;
         RanTime();
@@ -63,11 +69,34 @@ public class FoodSpawner : MonoBehaviour {
     {
         timeToSpawnSpecialFood = Random.Range(min, max);
     }
-    /// <summary> Generates random position inside play area. </summary>
+    
+    /// <summary> Generates random position inside play area. And check if that position is free </summary>
     void RanPos()
     {
         x = ((int)Random.Range(left.position.x+1, right.position.x) - 0.5f);
         y = (int)Random.Range(bottom.position.y+1, top.position.y) - 0.5f;
+        Vector2 pos = new Vector2(x, y);
+        if (food || specialFood)
+        {
+            if (pos == food.FoodPos || pos == specialFood.SpFoodPos)
+            {
+                RanPos();
+            }
+        }
+        else if (pos == snakeBehaviour.HPos)
+        {
+            RanPos();
+        }else if(snakeBehaviour.GetSizeOfTail() > 0)
+        {
+            for (int i = 0; i < snakeBehaviour.GetSizeOfTail(); i++)
+            {
+                if (pos == snakeBehaviour.GetVecOfTail(i))
+                {
+                    RanPos();
+                }
+            }
+        }
+
     }
 
 

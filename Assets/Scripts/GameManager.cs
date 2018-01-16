@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+static class GameManager {
 
     public static int Score { get; set; }
 
-    private void Start()
+    public static void NewGame()
     {
         Score = 0;
     }

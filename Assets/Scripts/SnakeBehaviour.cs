@@ -8,9 +8,10 @@ public class SnakeBehaviour : MonoBehaviour {
     [Range(0, 10)] //0 is setted to 4 as default in Start method
     public int snakeSpeed;
     public GameObject tailPrefab;
+    public GameObject snake;
+    public Vector2 HPos { get; set; } // position of snake's head
     [SerializeField]
     private int direction;
-    private Vector2 hpos; // position of snake's head
     private bool snakeGrow; // true if snake ate food
     private LevelManager levMan;
     private FoodSpawner foodSpawner;
@@ -23,6 +24,7 @@ public class SnakeBehaviour : MonoBehaviour {
         inGameUI = FindObjectOfType<InGameUI>();
         levMan = FindObjectOfType<LevelManager>();
         foodSpawner = FindObjectOfType<FoodSpawner>();
+
         if(snakeSpeed == 0)
         {
             snakeSpeed = 4;
@@ -32,6 +34,16 @@ public class SnakeBehaviour : MonoBehaviour {
     }
 
 
+    public int GetSizeOfTail()
+    {
+        return tail.Count;
+    }
+
+    public Vector2 GetVecOfTail(int i)
+    {
+        return new Vector2(tail[i].transform.position.x, tail[i].transform.position.y);
+    }
+
 
     /// <summary>
     /// Translates position of Head (depending on direction field) and Tail gameobjects.
@@ -40,7 +52,7 @@ public class SnakeBehaviour : MonoBehaviour {
     void SnakeMoving ()
     {
         CheckingDirection();
-        hpos = transform.position;
+        HPos = transform.position;
 
         if(direction == 0)
         {
@@ -65,13 +77,13 @@ public class SnakeBehaviour : MonoBehaviour {
         }
         if (snakeGrow)
         {
-            GameObject obj = Instantiate(tailPrefab, hpos, Quaternion.identity) as GameObject;
+            GameObject obj = Instantiate(tailPrefab, HPos, Quaternion.identity, snake.transform) as GameObject;
             tail.Insert(0, obj);
             snakeGrow = false;
         }
         else if (tail.Count > 0)
         {
-            tail[tail.Count - 1].transform.position = hpos;
+            tail[tail.Count - 1].transform.position = HPos;
             tail.Insert(0, tail[tail.Count - 1]);
             tail.RemoveAt(tail.Count - 1);
         }

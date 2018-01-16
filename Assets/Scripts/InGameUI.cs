@@ -10,14 +10,6 @@ public class InGameUI : MonoBehaviour {
 
     private bool leftPressed, rightPressed;
 
-    private void Start()
-    {
-        if(GameManager.Score != 0)
-        {
-            GameManager.Score = 0;
-        }
-    }
-
     /// <value> LeftPressed property gets / sets the value of bool field leftPressed. </value>
     public bool LeftPressed
     {
